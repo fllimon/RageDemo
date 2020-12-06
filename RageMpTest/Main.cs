@@ -8,7 +8,7 @@ namespace RageMpTest
         [ServerEvent(Event.PlayerConnected)]
         public void GetPlayerConnected(Player somePlayer)
         {
-            Console.WriteLine($"{somePlayer.SocialClubName} connected the server!");
+            Console.WriteLine($"Player {somePlayer.SocialClubName} connected the server!");
         }
     }
 }
