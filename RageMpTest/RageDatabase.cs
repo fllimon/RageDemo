@@ -18,6 +18,44 @@ namespace RageMpTest
             _sqlConnection.Open();
         }
 
+        public bool GetPlayerLogin(string login)
+        {
+            try
+            {
+                bool isExist = false;
+                string playerLogin = string.Empty;
+
+                string sqlCommand = "SELECT PlayerLogin FROM Accounts WHERE PlayerLogin LIKE @login";
+                SqlCommand command = _sqlConnection.CreateCommand();
+                command.CommandText = sqlCommand;
+
+                SqlParameter loginParameter = new SqlParameter("@login", login);
+                AddNewParameters(command, loginParameter);
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        playerLogin = reader.ToString();
+                    }
+                }
+
+                if (playerLogin == login)
+                {
+                    isExist = true;
+
+                    return isExist;
+                }
+
+                return isExist;
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
         public bool IsAccountExistBySocialName(string socialName)
         {
             try
@@ -52,7 +90,7 @@ namespace RageMpTest
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.Message);
                 throw;
             }
         }
@@ -78,7 +116,7 @@ namespace RageMpTest
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.Message);
             }
         }
 
