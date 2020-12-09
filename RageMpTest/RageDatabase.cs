@@ -18,13 +18,43 @@ namespace RageMpTest
             _sqlConnection.Open();
         }
 
-        public PlayerModel GetPlayerDataByLogin(string login)
+        public PlayerModel GetAllPlayerData(string socialName)
         {
-            PlayerModel player = null;
+            PlayerModel model = null;
+
+            string sqlCommand = "SELECT * FROM Accounts WHERE SocialName LIKE @socialName";
+            SqlCommand command = _sqlConnection.CreateCommand();
+            command.CommandText = sqlCommand;
+
+            SqlParameter loginParameter = new SqlParameter("@socialName", socialName);
+            AddNewParameters(command, loginParameter);
+
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    model = new PlayerModel()
+                    {
+                        PlayerLogin = reader["PlayerLogin"].ToString(),
+                        FirstName = reader["FirstName"].ToString(),
+                        LastName = reader["LastName"].ToString(),
+                        SocialName = reader["SocialName"].ToString(),
+                        Email = reader["Email"].ToString(),
+                        Password = reader["UserPassword"].ToString()
+                    };
+                }
+            }
+
+            return model;
+        }
+
+        public string GetPlayerDataByLogin(string login)
+        {
+            string pass = string.Empty;
 
             try
             {
-                string sqlCommand = "SELECT PlayerLogin, UserPassword FROM Accounts WHERE PlayerLogin LIKE @login";
+                string sqlCommand = "SELECT UserPassword FROM Accounts WHERE PlayerLogin LIKE @login";
                 SqlCommand command = _sqlConnection.CreateCommand();
                 command.CommandText = sqlCommand;
 
@@ -35,12 +65,11 @@ namespace RageMpTest
                 {
                     while (reader.Read())
                     {
-                        player.PlayerLogin = reader[0].ToString();
-                        player.Password = reader[1].ToString();
+                        pass = reader["UserPassword"].ToString();
                     }
                 }
 
-                return player;
+                return pass;
             }
             catch (SqlException ex)
             {
@@ -212,7 +241,7 @@ namespace RageMpTest
             }
         }
 
-        public void AddNewAccount(PlayerModel player/*string login, string firstName, string lastName, string email, string socialName, string password*/)
+        public void AddNewAccount(PlayerModel player)
         {
             try
             {

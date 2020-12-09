@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "RageMpTest": {
+      "commandName": "Executable",
+      "executablePath": "D:\\RAGEMP\\server-files\\ragemp-server.exe",
+      "workingDirectory": "D:\\RAGEMP\\server-files",
+      "remoteDebugEnabled": false
+    }
+  }
+}

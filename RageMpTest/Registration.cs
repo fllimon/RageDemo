@@ -13,7 +13,7 @@ namespace RageMpTest
         [Command("registration", Alias = "reg", SensitiveInfo = true)]
         public void GetPlayerRegistration(Player somePlayer, string login, string firstName, string lastName, string password, string email)
         {
-            if (!IsEmptyString(login, firstName, lastName, password, email))
+            if (IsEmptyString(login, firstName, lastName, password, email))
             {
                 NAPI.Chat.SendChatMessageToPlayer(somePlayer, "~r~ Значения не могут быть пустыми!");
 
@@ -36,6 +36,7 @@ namespace RageMpTest
 
             _playerModel = new PlayerModel();
 
+            _playerModel.PlayerLogin = login;
             _playerModel.FirstName = firstName;
             _playerModel.LastName = lastName;
             _playerModel.Email = email;
@@ -67,25 +68,21 @@ namespace RageMpTest
                 return;
             }
 
-            PlayerModel model = _db.GetPlayerDataByLogin(login);
+            string pass = _db.GetPlayerDataByLogin(login);
 
-            if (model != null)
-            {
-                NAPI.Chat.SendChatMessageToPlayer(somePlayer, "~r~ Пользователя не существует!");
-
-                return;
-            }
-
-            if (model.Password != password)
+            if (pass != password)
             {
                 NAPI.Chat.SendChatMessageToPlayer(somePlayer, "~r~ Некорректный логин или пароль!");
 
                 return;
             }
 
+            PlayerModel model  = _db.GetAllPlayerData(somePlayer.SocialClubName);
+
             somePlayer.Position = new Vector3(model.OldPosition[0], model.OldPosition[1], model.OldPosition[2]);
             somePlayer.SetData("Id", model.Id);
             somePlayer.SetData("PlayerModel", model);
+            somePlayer.Name = model.FirstName + " " + model.LastName;
             NAPI.Chat.SendChatMessageToPlayer(somePlayer, "~y~ Вы успешно авторизовались");
         }
 

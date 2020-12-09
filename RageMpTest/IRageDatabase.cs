@@ -9,12 +9,14 @@ namespace RageMpTest
         bool GetPlayerLogin(string login);
 
         bool IsAccountExistBySocialName(string socialName);
-        void AddNewAccount(PlayerModel player /*string login, string firstName, string lastName, string email, string socialName, string password*/);
+        void AddNewAccount(PlayerModel player);
 
         long GetPlayerIdBySocialName(string socialName);
 
         void AddPlayerPosition(long id, float x, float y, float z);
 
-        PlayerModel GetPlayerDataByLogin(string login);
+        string GetPlayerDataByLogin(string login);
+
+        PlayerModel GetAllPlayerData(string socialName);
     }
 }
