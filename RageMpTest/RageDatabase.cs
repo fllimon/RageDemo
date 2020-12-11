@@ -40,7 +40,8 @@ namespace RageMpTest
                         LastName = reader["LastName"].ToString(),
                         SocialName = reader["SocialName"].ToString(),
                         Email = reader["Email"].ToString(),
-                        Password = reader["UserPassword"].ToString()
+                        Password = reader["UserPassword"].ToString(),
+                        OldPosition = new float[] { (float)reader["PositionX"], (float)reader["PositionY"], (float)reader["PositionZ"] }
                     };
                 }
             }
@@ -83,7 +84,7 @@ namespace RageMpTest
             bool isUpdate = false;
             try
             {
-                string sqlCommand = "UPDATE PlayersPositions SET PositionX = @x, PositionY = @y, PositionZ = @z WHERE AccountId = @id";
+                string sqlCommand = "UPDATE Accounts SET PositionX = @x, PositionY = @y, PositionZ = @z WHERE AccountId = @id";
 
                 SqlCommand command = _sqlConnection.CreateCommand();
                 command.CommandText = sqlCommand;
@@ -107,31 +108,6 @@ namespace RageMpTest
                 return isUpdate;
             }
         }
-
-        public void AddPlayerPosition(long id, float x, float y, float z)
-        {
-            try
-            {
-                string sqlCommand = "INSERT INTO Positions(AccountID, PositionX, PositionY, PositionZ) " +
-                                    "VALUES(@accountId, @x, @y, @z)";
-
-                SqlCommand command = _sqlConnection.CreateCommand();
-                command.CommandText = sqlCommand;
-
-                SqlParameter xParameter = new SqlParameter("@x", x);
-                SqlParameter yParameter = new SqlParameter("@y", y);
-                SqlParameter zParameter = new SqlParameter("@z", z);
-                SqlParameter accountIdParameter = new SqlParameter("@accountId", id);
-
-                AddNewParameters(command, accountIdParameter, xParameter, yParameter, zParameter);
-                command.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-        }
-
 
         public long GetPlayerIdBySocialName(string socialName)
         {
@@ -182,7 +158,7 @@ namespace RageMpTest
                 {
                     while (reader.Read())
                     {
-                        playerLogin = reader.ToString();
+                        playerLogin = reader["PlayerLogin"].ToString();
                     }
                 }
 
@@ -198,6 +174,46 @@ namespace RageMpTest
             catch (SqlException ex)
             {
                 Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
+        public bool IsExistAccountByFirstLastName(string firstName, string lastName)
+        {
+            try
+            {
+                bool isExist = false;
+                string playerFirstName = string.Empty;
+                string playerLastName = string.Empty;
+
+                string sqlCommand = "SELECT FirstName, LastName FROM Accounts WHERE FirstName LIKE @firstName AND LastName LIKE @lastName";
+
+                SqlCommand command = _sqlConnection.CreateCommand();
+                command.CommandText = sqlCommand;
+
+                SqlParameter firstNameParameter = new SqlParameter("@firstName", firstName);
+                SqlParameter lastNameParameter = new SqlParameter("@lastName", lastName);
+                AddNewParameters(command, firstNameParameter, lastNameParameter);
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        playerFirstName = reader["FirstName"].ToString();
+                        playerLastName = reader["LastName"].ToString();
+                    }
+                }
+
+                if ((playerFirstName == firstName) && (playerLastName == lastName))
+                {
+                    return isExist = true;
+                }
+
+                return isExist;
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex);
                 throw;
             }
         }

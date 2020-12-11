@@ -8,8 +8,6 @@ namespace RageMpTest
 {
     class PlayerModel : Script
     {
-        //public static readonly string PlayerIdentifier = "PlayerInfo";
-
         public long Id { get; set; }
 
         public string PlayerLogin { get; set; }
@@ -28,8 +26,6 @@ namespace RageMpTest
 
         public int PlayerArmor { get; set; }
 
-        public float[] OldPosition { get; set; } = new float[] { -1537, -942, 11 };
-
-
+        public float[] OldPosition { get; set; }
     }
 }

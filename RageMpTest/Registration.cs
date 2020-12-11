@@ -20,6 +20,13 @@ namespace RageMpTest
                 return;
             }
 
+            if (_db.IsExistAccountByFirstLastName(firstName, lastName))
+            {
+                NAPI.Chat.SendChatMessageToPlayer(somePlayer, "~r~ Аккаунт с таким Именем и Фамилией уже существует!");
+
+                return;
+            }
+
             if (_db.GetPlayerLogin(login))
             {
                 NAPI.Chat.SendChatMessageToPlayer(somePlayer, "~r~Пользователь с таким логином уже существует!");
@@ -77,8 +84,10 @@ namespace RageMpTest
                 return;
             }
 
-            PlayerModel model  = _db.GetAllPlayerData(somePlayer.SocialClubName);
+            long playerId = _db.GetPlayerIdBySocialName(somePlayer.SocialClubName);
 
+            PlayerModel model  = _db.GetAllPlayerData(somePlayer.SocialClubName);
+           
             somePlayer.Position = new Vector3(model.OldPosition[0], model.OldPosition[1], model.OldPosition[2]);
             somePlayer.SetData("Id", model.Id);
             somePlayer.SetData("PlayerModel", model);
