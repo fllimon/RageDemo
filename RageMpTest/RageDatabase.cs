@@ -41,7 +41,7 @@ namespace RageMpTest
                         SocialName = reader["SocialName"].ToString(),
                         Email = reader["Email"].ToString(),
                         Password = reader["UserPassword"].ToString(),
-                        OldPosition = new float[] { (float)reader["PositionX"], (float)reader["PositionY"], (float)reader["PositionZ"] }
+                        OldPosition = new float[] { (float)(double)reader["PositionX"], (float)(double)reader["PositionY"], (float)(double)reader["PositionZ"] }
                     };
                 }
             }
@@ -84,7 +84,7 @@ namespace RageMpTest
             bool isUpdate = false;
             try
             {
-                string sqlCommand = "UPDATE Accounts SET PositionX = @x, PositionY = @y, PositionZ = @z WHERE AccountId = @id";
+                string sqlCommand = "UPDATE Accounts SET PositionX = @x, PositionY = @y, PositionZ = @z WHERE Id = @id";
 
                 SqlCommand command = _sqlConnection.CreateCommand();
                 command.CommandText = sqlCommand;
@@ -92,7 +92,7 @@ namespace RageMpTest
                 SqlParameter xParameter = new SqlParameter("@x", x);
                 SqlParameter yParameter = new SqlParameter("@y", y);
                 SqlParameter zParameter = new SqlParameter("@z", z);
-                SqlParameter accountIdParameter = new SqlParameter("@accountId", id);
+                SqlParameter accountIdParameter = new SqlParameter("@id", id);
 
                 AddNewParameters(command, accountIdParameter, xParameter, yParameter, zParameter);
                 command.ExecuteNonQuery();

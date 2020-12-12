@@ -3,7 +3,11 @@ using RAGE;
 
 namespace RageMpClient
 {
-    class Main
+    class Main : Events.Script
     {
+        public Main()
+        {
+            
+        }
     }
 }

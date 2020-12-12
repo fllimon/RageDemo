@@ -14,7 +14,7 @@ namespace RageMpTest
         }
 
         [ServerEvent(Event.PlayerDisconnected)]
-        public void GetPlayerDisconnect(Player somePlayer, DisconnectionType type)
+        public void GetPlayerDisconnect(Player somePlayer, DisconnectionType type, string reason)
         {
             if (somePlayer.HasData("Id") == false)
             {
