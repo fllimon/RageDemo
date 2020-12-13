@@ -96,14 +96,6 @@ namespace RageMpTest
             NAPI.Chat.SendChatMessageToPlayer(somePlayer, "~y~ Вы успешно авторизовались");
         }
 
-        [ServerEvent(Event.PlayerSpawn)]
-        private void RenderDebugText(Player somePlayer)
-        {
-            NAPI.ClientEvent.TriggerClientEvent(somePlayer, "DrawPlayerPosition",
-                                                $"{somePlayer.Position.X} - {somePlayer.Position.Y} - {somePlayer.Position.Z}",
-                                                0.24, 0.97, 255, 255, 255, 1);
-        }
-
         private bool IsEmptyString(params string[] data)
         {
             bool isNotEmpty = false;

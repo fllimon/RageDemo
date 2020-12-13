@@ -7,7 +7,7 @@ namespace RageMpClient
     {
         public Main()
         {
-            
+           
         }
     }
 }
