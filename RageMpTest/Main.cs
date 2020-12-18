@@ -7,6 +7,31 @@ namespace RageMpTest
     {
         private IRageDatabase _db = new RageDatabase();
 
+        [ServerEvent(Event.ResourceStart)]
+        public void GetResourseStart()
+        {
+            NAPI.Server.SetAutoRespawnAfterDeath(false);
+            NAPI.Server.SetAutoSpawnOnConnect(false);
+            NAPI.Server.SetGlobalServerChat(false);
+
+            foreach (InteriorModel interior in DefaultSettings.DEFAULT_INTERIOR_LIST)
+            {
+                if (interior.BlipId > 0)
+                {
+                    interior.SomeBlip = NAPI.Blip.CreateBlip(interior.EnterPosition);
+                    interior.SomeBlip.Sprite = (uint)interior.BlipId;
+                    interior.SomeBlip.Name = interior.BlipName;
+                    interior.SomeBlip.ShortRange = true;
+                }
+
+                if (interior.CaptionMessage != string.Empty)
+                {
+                    interior.SomeTextLabel = NAPI.TextLabel.CreateTextLabel(interior.CaptionMessage, interior.EnterPosition,
+                                                                            20.0f, 0.75f, 4, new Color(255, 255, 255), false, 0);
+                }
+            }
+        }
+
         [ServerEvent(Event.PlayerConnected)]
         public void GetPlayerConnected(Player somePlayer)
         {

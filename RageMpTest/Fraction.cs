@@ -8,10 +8,6 @@ namespace RageMpTest
 {
     abstract class Fraction : Script
     {
-        protected abstract ColShape ColshapePosition { get; }
-
-        protected abstract Blip BlipPosition { get; }
-
         [Command("r")]
         protected abstract void GetFravtionChat(Player somePlayer, string message);
 

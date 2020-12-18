@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-using GTANetworkAPI;
-
 namespace RageMpTest
 {
-    class PlayerModel : Script
+    class PlayerModel
     {
         public long Id { get; set; }
 
